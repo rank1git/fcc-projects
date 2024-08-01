@@ -1,0 +1,59 @@
+** start of undefined **
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <input id="text-input"/>
+    <button id="check-btn">Check</button>
+    <div id="result"></div>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+** end of undefined **
+
+** start of undefined **
+
+
+
+** end of undefined **
+
+** start of undefined **
+
+const textInput = document.querySelector('#text-input');
+const checkBtn = document.querySelector('#check-btn');
+const result = document.querySelector('#result');
+
+checkBtn.addEventListener('click', () => {
+  const pureText = removeSpecialChars(textInput.value);
+  
+  if(pureText === ''){
+    alert("Please input a value")
+  } else if (pureText.length === 1) {
+    result.innerText = `${pureText} is a palindrome`
+  } else {
+    result.innerText = palindrome(pureText) ? `${textInput.value} is a palindrome` : `${textInput.value} is not a palindrome`;
+  }
+})
+
+const removeSpecialChars = (text) => {
+ return text.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+}
+
+const palindrome = (text) => {
+  const textArray = text.split('');
+  for(let i = 0; i < textArray.length; i++) {
+    if(textArray[i] === textArray[textArray.length-(i+1)]) {
+      continue;
+    } else {
+      return false;
+    }
+  } return true;
+}
+
+** end of undefined **
+
