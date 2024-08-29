@@ -1,0 +1,143 @@
+** start of undefined **
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div id="item-price"></div>
+    <br>
+    <div id="input-prompt"></div>
+    <br>
+    <input id="cash" type="text">
+    <br>
+    <div id='change-due'></div>
+    <br>
+    <button id="purchase-btn">Purchase</button>
+
+
+    <script src="./script.js">
+    </script>
+  </body>
+</html>
+
+** end of undefined **
+
+** start of undefined **
+
+
+
+** end of undefined **
+
+** start of undefined **
+
+const cash = document.getElementById('cash');
+const changeDue = document.getElementById('change-due');
+const purchaseBtn = document.getElementById('purchase-btn');
+const itemPrice = document.getElementById('item-price');
+const inputPrompt = document.getElementById('input-prompt');
+
+let price = 32;
+let cid = [["PENNY", 1.01], ["NICKEL", 2.05], ["DIME", 3.1], ["QUARTER", 4.25], ["ONE", 90], ["FIVE", 55], ["TEN", 20], ["TWENTY", 60], ["ONE HUNDRED", 100]];
+const currencyUnit = [  
+ 	0.01,
+  0.05, 
+  0.10,
+  0.25,
+  1,
+  5,
+  10,
+  20,
+  100,
+]
+
+
+itemPrice.innerHTML = `The price for this item is ${price}.`;
+inputPrompt.innerHTML = `Please enter your cash amount below:`;
+
+
+purchaseBtn.addEventListener('click', () => {
+  if(Number(cash.value) < price) {
+    alert('Customer does not have enough money to purchase the item');
+  } else if(Number(cash.value) === price) {
+    changeDue.textContent = "No change due - customer paid with exact cash";
+  } else if(Number(cash.value) > price) {
+    changeDue.textContent = calculateChangeDue();
+  }
+})
+
+const calculateChangeDue = () => {
+  let change = (cash.value - price).toFixed(2);
+  let currAmount = 0;
+  const currTypeGiven = []; 
+  let status = rStatus(change);
+  // console.log(totalCID(), change);
+  for(let i = currencyUnit.length - 1; i >= 0 ; i--) {
+    if(currencyUnit[i] > change) {
+      continue;
+    } else { 
+      let enoughCID = cid[i][1];
+      
+      while(change >= currencyUnit[i] && enoughCID > 0 && change > 0) {
+        // console.log(change, "-", currencyUnit[i]);
+        change -= currencyUnit[i];
+        enoughCID -= currencyUnit[i];
+        cid[i][1] -= currencyUnit[i];
+        currAmount += currencyUnit[i];
+        
+        if(change > 0 && change < .01) {
+          change = 0;
+          currAmount += 0.01;
+          cid[i][1] -= .01;
+        }
+        if(enoughCID === 0) {
+
+        }
+      } if(currAmount > 0) {
+          currTypeGiven.push([cid[i][0], currAmount.toFixed(2)]);
+        }
+      console.log(currTypeGiven);
+      currAmount = 0;
+    } 
+  } if(change > 0) {
+    status = "Status: INSUFFICIENT_FUNDS";
+    return status;
+  } else {
+    return status + changeGiven(currTypeGiven); 
+  }
+  
+}
+
+const rStatus = (change) => {
+  let status = "";
+  if(Number(totalCID()) > Number(change)) {
+    status = "Status: OPEN ";
+  } else if(Number(totalCID()) === Number(change)) {
+    status = "Status: CLOSED ";
+  } else if(Number(totalCID()) < Number(change)) {
+    status = "Status: INSUFFICIENT_FUNDS";
+  }
+  return status;
+}
+
+const changeGiven = (arr) => {
+  let changeString = ``;
+  arr.forEach((ele) => {
+    changeString += `${ele[0]}: $${ele[1]} `;
+  })
+  changeString = changeString.replaceAll(",", ": ");
+  return changeString;
+}
+
+const totalCID = () => {
+  let acc = 0;
+  for(let i = 0; i < cid.length; i++) {
+    acc += cid[i][1];
+  }
+  return acc.toFixed(2);
+}
+
+
+** end of undefined **
+
