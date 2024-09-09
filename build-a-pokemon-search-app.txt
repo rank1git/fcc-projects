@@ -1,0 +1,203 @@
+** start of undefined **
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./styles.css">
+    <style>
+      #pokemon-name, #pokemon-id {
+        display: inline;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="search-input" required>
+    <button id="search-button">Search</button>
+    <br>
+    <div id="pokemon-name"></div>
+    <div id="pokemon-id"></div>
+    <div id="weight"></div>
+    <div id="height"></div>
+    <div id="types"></div>
+    <div id="hp"></div>
+    <div id="attack"></div>
+    <div id="defense"></div>
+    <div id="special-attack"></div>
+    <div id="special-defense"></div>
+    <div id="speed"></div>
+    <div id="pokemon-pic"></div> 
+    
+    
+    <script src="script.js">
+    </script>
+  </body>
+</html>
+
+
+** end of undefined **
+
+** start of undefined **
+
+const searchInput = document.getElementById('search-input');
+const searchBtn = document.getElementById('search-button');
+const pokemonName = document.getElementById("pokemon-name");
+const pokemonId = document.getElementById("pokemon-id");
+const weight = document.getElementById("weight");
+const height = document.getElementById("height");
+const types = document.getElementById("types");
+const hp = document.getElementById("hp");
+const attack = document.getElementById("attack");
+const defense = document.getElementById("defense");
+const specialAttack = document.getElementById("special-attack");
+const specialDefense = document.getElementById("special-defense");
+const speed = document.getElementById("speed");
+const pokemonPic = document.getElementById('pokemon-pic');
+const pokemon = "https://pokeapi-proxy.freecodecamp.rocks/api/pokemon";
+
+let pokemonData = [];
+
+const fetchData = async () => {
+  try {
+    const res = await fetch(pokemon);
+    const data = await res.json();
+    validPoke(getPokeData(data));
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const getPokeData = (data) => {
+  const {results} = data;
+  const idArr = results.map((result) => result.id);
+  const nameArr = results.map(({name}) => name);
+  const urlArr = results.map(({url}) => url);
+  
+  return [idArr, nameArr, urlArr];
+}
+
+
+
+searchBtn.addEventListener('click', () => {
+  fetchData();
+})
+searchInput.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') {
+    fetchData();
+  }
+})
+
+const validPoke = (arr) => {
+  if(arr[0].includes(Number(searchInput.value))) {
+    // console.log("found with id");
+    getPokemon(arr[1][searchInput.value - 1]);
+  } else if(arr[1].includes(searchInput.value.toLowerCase())) { 
+    // console.log("found with name");
+    getPokemon(searchInput.value.toLowerCase());
+    // console.log(arr[1].find(ele => ele === searchInput.value.toLowerCase()));
+  } else {
+    alert("Pokémon not found");
+  }
+}
+
+const getPokemon = async (input) => {
+  try {
+    const res = await fetch(`${pokemon}/${input}`);
+    const data = await res.json();
+    displayPoke(data, input);
+    // console.log(data);
+  } catch (err) {
+    console.log(err);
+  }
+  // console.log(inputPoke);
+
+}
+const displayPoke = (pokemon) => {
+  clearPokemon(pokemon);
+  
+  pokemonName.value = `${pokemon.name.toUpperCase()}`;
+  pokemonName.textContent = pokemonName.value;
+  console.log(pokemonName.value);
+  
+  pokemonId.value = `${pokemon.id}`;
+  pokemonId.textContent = pokemonId.value;
+  console.log(pokemonId.value);
+  
+  weight.value = `${pokemon.weight}`;
+  weight.textContent = weight.value;
+  console.log(weight.value);
+  
+  height.value = `${pokemon.height}`;
+  height.textContent = height.value;
+  console.log(height.value);
+  
+  types.innerHTML = pokemon.types.length > 1 ? `
+    <div>${pokemon.types[0].type.name.toUpperCase()}</div>
+    <div>${pokemon.types[1].type.name.toUpperCase()}` : 
+    `<div>${pokemon.types[0].type.name.toUpperCase()}</div>`;
+  console.log(types.value);
+  
+  hp.value = `${pokemon.stats[0].base_stat}`;
+  hp.textContent = hp.value;
+  console.log(hp.value);
+  
+  attack.value = `${pokemon.stats[1].base_stat}`;
+  attack.textContent = attack.value;
+  console.log(attack.value);
+  
+  defense.value = `${pokemon.stats[2].base_stat}`;
+  defense.textContent = defense.value;
+  console.log(defense.value);
+  
+  specialAttack.value = `${pokemon.stats[3].base_stat}`;
+  specialAttack.textContent = specialAttack.value;
+  console.log(specialAttack.value);
+  
+  specialDefense.value = `${pokemon.stats[4].base_stat}`;
+  specialDefense.textContent = specialDefense.value;
+  console.log(specialDefense.value);
+  
+  speed.value = `${pokemon.stats[5].base_stat}`;
+  speed.textContent = speed.value;
+  console.log(speed.value);
+  pokemonPic.innerHTML += `
+    <img id="sprite" src="${pokemon.sprites.front_default}" >
+  `;
+}
+
+const clearPokemon = () => {
+  pokemonName.innerText = ``;
+  pokemonId.innerText = ``;
+  weight.innerText = ``;
+  height.innerText = ``;
+  types.innerHTML = "";
+  hp.innerText = ``;
+  attack.innerText = ``;
+  defense.innerText = ``;
+  specialAttack.innerText = ``;
+  specialDefense.innerText = ``;
+  speed.innerText = ``;
+  pokemonPic.innerHTML = "";
+}
+
+// <div id="pokemon-name"></div>
+//     <div id="pokemon-id"></div>
+//     <div id="weight"></div>
+//     <div id="height"></div>
+//     <div id="types"></div>
+//     <div id="hp"></div>
+//     <div id="attack"></div>
+//     <div id="defense"></div>
+//     <div id="special-attack"></div>
+//     <div id="special-defense"></div>
+//     <div id="speed"></div>
+//     <div id="valid-poke"></div>
+
+** end of undefined **
+
+** start of undefined **
+
+
+
+** end of undefined **
+
